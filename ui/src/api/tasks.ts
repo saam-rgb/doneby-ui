@@ -39,7 +39,7 @@ export async function fetchTasks(): Promise<Task[]> {
     createdAt: row.created_at,
     due: row.due,
     priority: row.priority,
-    listId: row.list_id ?? "inbox",
+    listId: row.list_id ?? "",
     tags: (row.task_tags as { tag_id: string }[]).map((t) => t.tag_id),
     subtasks: row.subtasks ?? [],
     recurring: row.recurring,

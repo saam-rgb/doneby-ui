@@ -264,7 +264,7 @@ export function useAddTask() {
               l.name.toLowerCase().startsWith(parsed.listHint!) ||
               l.id === parsed.listHint
           )?.id ?? fallbackListId ?? "inbox"
-        : fallbackListId ?? "inbox";
+        : fallbackListId ?? lists[0]?.id ?? "";
 
       const tagIds: string[] = [];
       for (const name of parsed.tags ?? []) {
@@ -309,7 +309,7 @@ export function useAddTask() {
           createdAt: new Date().toISOString(),
           due: p.due,
           priority: p.priority,
-          listId: listId ?? "inbox",
+          listId: listId ?? lists[0]?.id ?? "",
           tags: [],
           subtasks: [],
           recurring: p.recurring,

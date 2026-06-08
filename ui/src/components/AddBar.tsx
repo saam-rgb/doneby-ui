@@ -23,7 +23,8 @@ export function AddBar({ state, view, addRef }: AddBarProps) {
   const [focus, setFocus] = useState(false);
   const { addTask } = useAddTask();
   const parsed = val.trim() ? parseInput(val) : null;
-  const fallbackList = view.type === "list" ? view.key : "inbox";
+  const inboxList = state.lists.find((l) => l.name.toLowerCase() === "inbox") ?? state.lists[0];
+  const fallbackList = view.type === "list" ? view.key : (inboxList?.id ?? "");
 
   const submit = async () => {
     if (!val.trim()) return;
