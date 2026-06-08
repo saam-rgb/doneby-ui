@@ -15,6 +15,7 @@ import {
   useUpdateProfile,
   useCreateList,
   useAddTask,
+  useLists,
 } from "../hooks";
 import { fmtDue, isToday, startOfDay, addDays } from "../lib/dates";
 import { BG_PRESETS } from "../lib/backgrounds";
@@ -444,6 +445,11 @@ const TEMPLATES = [
 
 export function Templates({ onClose, onApplied }: { onClose: () => void; onApplied: (title: string) => void }) {
   const { addBulk } = useAddTask();
+  const { data: lists = [] } = useLists();
+
+  const resolveListId = (name: string) =>
+    lists.find((l) => l.name.toLowerCase() === name.toLowerCase())?.id ?? lists[0]?.id ?? "";
+
   return (
     <Overlay onClose={onClose} wide>
       <Head icon={Icon.sparkles} title="Quick templates" onClose={onClose} />
@@ -457,7 +463,7 @@ export function Templates({ onClose, onApplied }: { onClose: () => void; onAppli
               key={t.id}
               className="tpl"
               onClick={async () => {
-                await addBulk(t.tasks, t.list);
+                await addBulk(t.tasks, resolveListId(t.list));
                 onApplied(t.title);
                 onClose();
               }}
