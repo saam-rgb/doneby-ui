@@ -297,6 +297,7 @@ export function useAddTask() {
     },
     addBulk: async (items: string[], listId?: string) => {
       const tasks = qc.getQueryData<Task[]>(["tasks"]) ?? [];
+      const allLists = qc.getQueryData<List[]>(["lists"]) ?? [];
       let minOrder = Math.min(0, ...tasks.map((t) => t.order));
       for (const item of items) {
         const p = parseInput(item);
@@ -309,7 +310,7 @@ export function useAddTask() {
           createdAt: new Date().toISOString(),
           due: p.due,
           priority: p.priority,
-          listId: listId ?? lists[0]?.id ?? "",
+          listId: listId ?? allLists[0]?.id ?? "",
           tags: [],
           subtasks: [],
           recurring: p.recurring,
