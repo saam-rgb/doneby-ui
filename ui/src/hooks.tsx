@@ -263,7 +263,7 @@ export function useAddTask() {
             (l) =>
               l.name.toLowerCase().startsWith(parsed.listHint!) ||
               l.id === parsed.listHint
-          )?.id ?? fallbackListId ?? "inbox"
+          )?.id ?? fallbackListId ?? lists[0]?.id ?? ""
         : fallbackListId ?? lists[0]?.id ?? "";
 
       const tagIds: string[] = [];
@@ -295,9 +295,13 @@ export function useAddTask() {
         order: minOrder,
       });
     },
-    addBulk: async (items: string[], listId?: string) => {
+    addBulk: async (items: string[], listNameOrId?: string) => {
       const tasks = qc.getQueryData<Task[]>(["tasks"]) ?? [];
       const allLists = qc.getQueryData<List[]>(["lists"]) ?? [];
+      // resolve by name first, then by id, then fall back to first list
+      const resolvedListId = allLists.find(
+        (l) => l.name.toLowerCase() === listNameOrId?.toLowerCase()
+      )?.id ?? allLists.find((l) => l.id === listNameOrId)?.id ?? allLists[0]?.id ?? "";
       let minOrder = Math.min(0, ...tasks.map((t) => t.order));
       for (const item of items) {
         const p = parseInput(item);
@@ -310,7 +314,7 @@ export function useAddTask() {
           createdAt: new Date().toISOString(),
           due: p.due,
           priority: p.priority,
-          listId: listId ?? allLists[0]?.id ?? "",
+          listId: resolvedListId,
           tags: [],
           subtasks: [],
           recurring: p.recurring,
