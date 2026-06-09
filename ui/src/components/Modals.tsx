@@ -457,7 +457,7 @@ export function Templates({ onClose, onApplied }: { onClose: () => void; onAppli
         <p style={{ margin: "0 0 18px", color: "var(--ink-soft)", fontSize: 14, fontWeight: 600 }}>
           Add a ready-made routine in one click. Tasks are parsed for dates, priorities and tags automatically.
         </p>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
           {TEMPLATES.map((t) => (
             <button
               key={t.id}
